@@ -1,0 +1,29 @@
+= Security Policy
+
+== Supported versions
+
+The project is in bootstrap development at `0.1.0-SNAPSHOT`. No stable version is
+currently released or supported for production use. A supported-version policy
+will be published with the first stable release.
+
+== Reporting a vulnerability
+
+Please do not disclose vulnerabilities, credentials, or exploit details in public
+issues. Use GitHub's private vulnerability reporting for this repository:
+
+https://github.com/Not-Your-Average-Dev/spring-data-dynamodb/security/advisories/new[Report a vulnerability privately].
+
+Include affected versions or commits, the impact, and a minimal reproduction
+without real credentials or personal data. Coordinate disclosure with the
+maintainers so that users can receive a fix before details are made public.
+
+Maintainers must enable and verify private vulnerability reporting before the
+first public release. If the reporting page is unavailable, use a private contact
+channel listed on the https://github.com/Not-Your-Average-Dev[organization profile]
+and request a secure way to share details.
+
+== Credentials
+
+Never commit AWS credentials, signing keys, repository tokens, or deployment
+secrets. Future publishing credentials must be supplied through the publishing
+environment, outside the repository.

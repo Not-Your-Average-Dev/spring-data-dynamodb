@@ -1,0 +1,38 @@
+= Code of Conduct
+
+Everyone participating in Spring Data DynamoDB is expected to help create a
+respectful, welcoming community, regardless of experience, background, identity,
+disability, or personal beliefs.
+
+== Expected behavior
+
+* Treat others with courtesy and respect.
+* Discuss ideas and code with specific, constructive feedback.
+* Respect privacy, differing experiences, and reasonable boundaries.
+* Accept corrections and take responsibility for the effect of your behavior.
+
+Harassment, threats, discriminatory language, unwanted sexual attention, personal
+attacks, and disclosure of another person's private information are unacceptable.
+
+== Scope and enforcement
+
+This policy applies to project issues, pull requests, discussions, and community
+spaces, and to people representing the project in public.
+
+Maintainers may edit or remove harmful content, warn participants, restrict
+participation, or remove a participant from the community. Decisions should be
+proportionate, explained to the people involved when appropriate, and respectful
+of reporter privacy. Retaliation against a good-faith report is unacceptable.
+
+== Reporting
+
+Contact the maintainers through a private contact channel listed on the
+https://github.com/Not-Your-Average-Dev[Not Your Average Dev organization profile].
+Include the relevant links and a short account of what happened. Do not publish
+private information in a public issue. GitHub's report-abuse tools are also
+available for conduct occurring on GitHub.
+
+Before opening the project to public contributions, maintainers must publish and
+verify a private conduct-reporting contact on the organization profile. Reports
+will be handled discreetly; information will be shared only as needed to review
+and respond to the incident.

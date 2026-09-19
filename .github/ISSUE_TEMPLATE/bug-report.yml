@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a reproducible problem in Spring Data DynamoDB.
+title: '[Bug]: '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This project is currently at bootstrap stage. Please report security
+        vulnerabilities privately using SECURITY.adoc, not through this form.
+  - type: input
+    id: version
+    attributes:
+      label: Project version or commit
+      placeholder: 0.1.0-SNAPSHOT or a commit hash
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include Java, Maven, Spring Boot (if used), operating system, and DynamoDB environment.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Provide a minimal public reproducer or exact steps and build command.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include relevant logs with credentials and personal data removed.
+    validations:
+      required: true

@@ -1,0 +1,12 @@
+= Changelog
+
+== 0.1.0-SNAPSHOT (unreleased)
+
+* Established the four-module Maven reactor and shared Java 17 build.
+* Added Spring Boot and AWS SDK BOM dependency management.
+* Reserved core and Boot package boundaries and stable automatic module names.
+* Added the Maven Wrapper, community files, Antora documentation structure,
+  dependency update configuration, and build and release-verification workflows.
+
+Repository APIs, mapping, queries, auto-configuration, and publishing are not yet
+implemented.

@@ -1,0 +1,27 @@
+= Spring Data DynamoDB
+
+DynamoDB support for Spring Data, independently maintained by Not Your Average Dev.
+
+This documentation describes the `0.1.0-SNAPSHOT` repository bootstrap. No
+repository APIs, mapping behavior, queries, or auto-configuration types exist yet.
+
+The project targets Java 17 and the Spring Boot 4.0.x baseline. The root parent
+POM owns the platform versions and shared build configuration. Core users will
+depend on `dev.notyouraverage:spring-data-dynamodb`; Spring Boot users will use
+`dev.notyouraverage:spring-data-dynamodb-spring-boot-starter`.
+
+See xref:architecture.adoc[modules and namespaces] for repository boundaries and
+xref:releases.adoc[build and release conventions] for verification and publication
+prerequisites.
+
+== Documentation sources
+
+All documentation sources live under `src/main/antora`. The component descriptor,
+playbook, navigation, and pages are reserved here. The local playbook uses the
+current Git branch; Antora requires the local repository to have at least one
+commit. Its default UI bundle is a development snapshot and must be pinned to an
+immutable artifact when a reproducible documentation pipeline is introduced.
+
+Antora generation is not part of `./mvnw verify` yet. Add its toolchain and any
+release archive plugins to the distribution module when those pipelines are
+introduced.

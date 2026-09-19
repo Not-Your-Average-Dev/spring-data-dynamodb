@@ -1,0 +1,56 @@
+= Build and release conventions
+
+== Verification
+
+Run `./mvnw verify` from the repository root. The build enforces Java 17 or later
+and Maven 3.9 or later, and compiles with `--release 17`. The wrapper pins Maven
+and verifies the distribution checksum. The parent pins lifecycle plugins and
+sets a fixed archive timestamp for reproducible JARs.
+
+CI runs on Java 17 against the parent POM's baseline and compatibility Boot
+versions. The latter is passed with `-Dspring-boot.version=...`; it does not change
+the published baseline. Dependabot proposes reviewable updates. Review
+`spring-boot.compatibility.version` when a supported minor or patch is released.
+
+Check that each JAR has its assigned automatic module name, the starter has no
+classes, and the core dependency tree contains no Boot artifacts. There are no
+behavioral tests until implementation code is introduced.
+
+== Before the first public release
+
+* Register and verify the `dev.notyouraverage` namespace in Maven Central and
+  establish the publishing account.
+* Verify developer identity, project URL, license, SCM, issue-management metadata,
+  private vulnerability reporting, and the private community reporting channel.
+* Add release-only source and Javadoc attachments, signing, and Central publishing
+  configuration after the account exists. The bootstrap manages source and
+  Javadoc plugin versions but does not attach or sign release artifacts yet.
+* Ensure every published library has source and Javadoc JARs, all required release
+  artifacts are signed, and all published POMs resolve complete metadata.
+* Keep credentials and signing material outside the repository.
+
+No milestone or snapshot repositories belong in released POMs. Do not shade or
+relocate Spring Data or AWS SDK packages. The distribution module remains excluded
+from deployment. The parent must be published for child POM inheritance, but is
+not a consumer dependency.
+
+== Release procedure
+
+. Start from a clean, reviewed commit that passes baseline and compatibility CI.
+. Change the root version and every child parent version to `0.1.0`. Leave child
+  project versions inherited and internal dependency versions as `${project.version}`.
+. Set the root SCM tag to `v0.1.0`, update the archive timestamp to the release
+  commit time, finalize the changelog, and update the Antora version metadata.
+. Verify the release from a clean checkout, including reproducible artifacts and
+  the publication checks configured after Central account setup.
+. Commit the release changes and tag that exact commit `v0.1.0`.
+. Run the release workflow on the tag. During bootstrap it only validates release
+  metadata, runs Maven verification, and uploads build artifacts for inspection.
+  It does not publish to Maven Central or create a GitHub release.
+. After publication has been separately configured and completed, return the
+  development branch to the next snapshot, reset the SCM tag to `HEAD`, and update
+  documentation and the changelog for the new development cycle.
+
+The initial default branch remains at `0.1.0-SNAPSHOT`. Add documentation and
+release-archive plugins only to the distribution module when their pipelines are
+introduced.

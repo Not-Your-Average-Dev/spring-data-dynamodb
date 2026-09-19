@@ -1,0 +1,78 @@
+= Modules and namespaces
+
+All modules inherit `dev.notyouraverage:spring-data-dynamodb-parent` and use the
+same reactor version, initially `0.1.0-SNAPSHOT`.
+
+[cols="2,1,3",options="header"]
+|===
+|Artifact |Packaging |Responsibility
+|`spring-data-dynamodb` |JAR |Boot-independent Spring Data integration.
+|`spring-data-dynamodb-spring-boot` |JAR |Spring Boot integration and future auto-configuration.
+|`spring-data-dynamodb-spring-boot-starter` |JAR |Dependency aggregation; no Java sources.
+|`spring-data-dynamodb-distribution` |POM |Documentation and future release assembly; deployment skipped.
+|===
+
+The Boot integration depends on the core. The starter depends on the Boot
+integration and `spring-boot-starter`, and selects AWS SDK `apache-client` at
+runtime. Core dependencies contain no Spring Boot artifacts. The Boot BOM in the
+parent supplies dependency management without adding Boot to the core classpath.
+
+The integration artifact is public for advanced dependency control; the core and
+starter are the normal consumer entry points. The parent is published as build
+metadata, not as a consumer dependency. Distribution is not initially published.
+
+== Reserved Java packages
+
+[source,text]
+----
+dev.notyouraverage.springdata.dynamodb
+dev.notyouraverage.springdata.dynamodb.config
+dev.notyouraverage.springdata.dynamodb.convert
+dev.notyouraverage.springdata.dynamodb.core
+dev.notyouraverage.springdata.dynamodb.mapping
+dev.notyouraverage.springdata.dynamodb.repository
+dev.notyouraverage.springdata.dynamodb.repository.config
+dev.notyouraverage.springdata.dynamodb.repository.query
+dev.notyouraverage.springdata.dynamodb.repository.support
+
+dev.notyouraverage.springdata.dynamodb.boot
+dev.notyouraverage.springdata.dynamodb.boot.autoconfigure
+dev.notyouraverage.springdata.dynamodb.boot.autoconfigure.properties
+----
+
+Boot packages belong only in the Boot integration module. `.gitkeep` files
+preserve empty directories and are excluded from JAR contents. No classes or
+`module-info.java` are introduced during bootstrap.
+
+The base configuration namespace is `notyouraverage.dynamodb`. The Boot module
+reserves `src/main/resources/META-INF/spring/`; add
+`org.springframework.boot.autoconfigure.AutoConfiguration.imports` only when real
+auto-configuration classes exist.
+
+== Automatic module names
+
+[cols="2,3",options="header"]
+|===
+|Artifact |`Automatic-Module-Name`
+|`spring-data-dynamodb` |`dev.notyouraverage.springdata.dynamodb`
+|`spring-data-dynamodb-spring-boot` |`dev.notyouraverage.springdata.dynamodb.boot`
+|`spring-data-dynamodb-spring-boot-starter` |`dev.notyouraverage.springdata.dynamodb.starter`
+|===
+
+Distribution produces no JAR and has no JPMS name.
+
+== Naming and future modules
+
+Use `DynamoDB` in prose, `dynamodb` in artifact IDs, directories, and package
+segments, and `DynamoDb` for future Java symbol prefixes. Do not use `dynamo-db`,
+`dynamoDB`, or `DynamoDb` in Maven artifact IDs.
+
+Third-party artifact names must not begin with `spring-boot`; that prefix is
+reserved for Spring-owned artifacts. Never publish `spring-boot-data-dynamodb`
+or `spring-boot-starter-data-dynamodb` under `dev.notyouraverage`.
+
+Reserve `spring-data-dynamodb-spring-boot-test`,
+`spring-data-dynamodb-spring-boot-starter-test`, and `spring-data-dynamodb-bom` for
+later. They are not part of the initial reactor. A separate BOM is unnecessary
+while all consumer modules share one version and the starter is the main entry
+point.

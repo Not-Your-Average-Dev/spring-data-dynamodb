@@ -1,0 +1,58 @@
+= Contributing to Spring Data DynamoDB
+
+Thank you for contributing. Read link:CODE_OF_CONDUCT.adoc[the code of conduct]
+and use the GitHub issue forms for reproducible bugs and proposed features.
+Report vulnerabilities using link:SECURITY.adoc[the security policy].
+
+== Local development
+
+Install a JDK at version 17 or later, clone the repository, and run:
+
+[source,shell]
+----
+./mvnw verify
+----
+
+The wrapper downloads a checksum-verified Maven distribution. Network access is
+required for the first build and for dependencies that are not cached. Builds
+require Maven 3.9 or later if you choose to use a local Maven installation.
+
+Follow `.editorconfig`. Use UTF-8, four spaces in Java and XML, and two spaces in
+YAML. Keep dependency and plugin versions in the parent POM. Child modules inherit
+the reactor version, and internal dependencies use `${project.version}`.
+
+== Scope and module boundaries
+
+The bootstrap deliberately has no Java implementation. Propose API and mapping
+design in an issue before introducing broad functionality. Add focused tests
+with behavior as it is implemented; empty placeholder tests are unnecessary.
+
+Keep Spring Boot dependencies and types out of the core library. Put Boot-specific
+code in the Boot integration module. The starter is a dependency-only JAR and
+must have no Java sources. Do not shade Spring Data or AWS SDK packages.
+
+Use `DynamoDB` in prose, `dynamodb` in artifact IDs, directories, and packages, and
+`DynamoDb` as a future Java symbol prefix. The base configuration namespace is
+`notyouraverage.dynamodb`.
+
+The link:src/main/antora/modules/ROOT/pages/architecture.adoc[architecture guide]
+records package boundaries and module names. Documentation sources belong in
+`src/main/antora`; future documentation and archive plugins belong in the
+distribution module.
+
+== Pull requests
+
+Keep changes focused, explain the behavior and motivation, and record relevant
+validation. Run `./mvnw verify` and the Boot compatibility build described in the
+README. Update documentation and `CHANGELOG.adoc` when behavior changes.
+
+Do not commit credentials, local Maven settings, signing keys, deployment tokens,
+or build output. Contributions are made under the project's Apache 2.0 license.
+
+== Dependency maintenance
+
+Dependabot opens weekly Maven and GitHub Actions pull requests. The Boot BOM
+stays on the lowest supported minor line; baseline minor upgrades require an
+intentional compatibility decision. Review and update
+`spring-boot.compatibility.version` in the parent POM as newer supported Boot
+minor releases become available. CI reads that property directly.

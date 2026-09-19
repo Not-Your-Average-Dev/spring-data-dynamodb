@@ -1,0 +1,91 @@
+name: Release verification
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-release:
+    name: Verify tagged release artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate release tag and POM metadata
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          from pathlib import Path
+          import xml.etree.ElementTree as ET
+
+          def require(condition, message):
+              if not condition:
+                  raise SystemExit(message)
+
+          require(os.environ['GITHUB_REF_TYPE'] == 'tag', 'Select a release tag when running this workflow manually.')
+          tag = os.environ['GITHUB_REF_NAME']
+          require(re.fullmatch(r'v\d+\.\d+\.\d+', tag), 'Release tags must use vMAJOR.MINOR.PATCH.')
+          ns = {'m': 'http://maven.apache.org/POM/4.0.0'}
+          root = ET.parse('pom.xml').getroot()
+
+          def value(node, path):
+              return node.findtext(path, namespaces=ns)
+
+          version = value(root, 'm:version')
+          require(version == tag[1:], 'The root POM version must match the release tag without v.')
+          require(value(root, 'm:scm/m:tag') == tag, 'The SCM tag must match the release tag.')
+          for field in ['m:name', 'm:description', 'm:url', 'm:licenses/m:license/m:name',
+                        'm:licenses/m:license/m:url', 'm:developers/m:developer/m:id',
+                        'm:developers/m:developer/m:name', 'm:scm/m:connection',
+                        'm:scm/m:developerConnection', 'm:scm/m:url', 'm:issueManagement/m:url']:
+              require(value(root, field), f'Missing publication metadata: {field}')
+          poms = [Path('pom.xml')]
+          for module in root.findall('m:modules/m:module', ns):
+              path = Path(module.text) / 'pom.xml'
+              poms.append(path)
+              child = ET.parse(path).getroot()
+              require(value(child, 'm:parent/m:groupId') == 'dev.notyouraverage', f'{path}: incorrect parent group')
+              require(value(child, 'm:parent/m:artifactId') == 'spring-data-dynamodb-parent', f'{path}: incorrect parent artifact')
+              require(value(child, 'm:parent/m:version') == version, f'{path}: parent version must match release')
+              require(value(child, 'm:version') is None, f'{path}: project version must be inherited')
+          for path in poms:
+              text = path.read_text(encoding='utf-8')
+              require('REPLACE_WITH_' not in text, f'{path}: unresolved publication placeholder')
+              require('-SNAPSHOT' not in text, f'{path}: snapshot reference in a release POM')
+          print(f'Release metadata verified for {tag}; publication is not configured.')
+          PY
+      - name: Set up Java 17
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - name: Verify release reactor
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify
+      - name: Upload artifacts for inspection
+        uses: actions/upload-artifact@v7
+        with:
+          name: spring-data-dynamodb-${{ github.ref_name }}
+          if-no-files-found: error
+          path: |
+            pom.xml
+            spring-data-dynamodb/pom.xml
+            spring-data-dynamodb/target/*.jar
+            spring-data-dynamodb-spring-boot/pom.xml
+            spring-data-dynamodb-spring-boot/target/*.jar
+            spring-data-dynamodb-spring-boot-starter/pom.xml
+            spring-data-dynamodb-spring-boot-starter/target/*.jar
+            LICENSE.txt
+            README.adoc
+            CHANGELOG.adoc
+      # Add signing and Central publication only after namespace/account setup.
