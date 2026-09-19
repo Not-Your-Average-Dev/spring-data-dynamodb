@@ -56,7 +56,7 @@
         <spring-boot.version>4.0.8</spring-boot.version>
         <!-- Used only by the CI compatibility build; published defaults stay on 4.0.x. -->
         <spring-boot.compatibility.version>4.1.1</spring-boot.compatibility.version>
-        <aws-sdk.version>2.54.17</aws-sdk.version>
+        <aws-sdk.version>2.54.19</aws-sdk.version>
 
         <maven-clean-plugin.version>3.5.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
