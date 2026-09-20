@@ -37,13 +37,13 @@ not a consumer dependency.
 == Release procedure
 
 . Start from a clean, reviewed commit that passes baseline and compatibility CI.
-. Change the root version and every child parent version to `0.1.0`. Leave child
+. Change the root version and every child parent version to `0.0.1`. Leave child
   project versions inherited and internal dependency versions as `${project.version}`.
-. Set the root SCM tag to `v0.1.0`, update the archive timestamp to the release
+. Set the root SCM tag to `v0.0.1`, update the archive timestamp to the release
   commit time, finalize the changelog, and update the Antora version metadata.
 . Verify the release from a clean checkout, including reproducible artifacts and
   the publication checks configured after Central account setup.
-. Commit the release changes and tag that exact commit `v0.1.0`.
+. Commit the release changes and tag that exact commit `v0.0.1`.
 . Run the release workflow on the tag. During bootstrap it only validates release
   metadata, runs Maven verification, and uploads build artifacts for inspection.
   It does not publish to Maven Central or create a GitHub release.
@@ -51,6 +51,6 @@ not a consumer dependency.
   development branch to the next snapshot, reset the SCM tag to `HEAD`, and update
   documentation and the changelog for the new development cycle.
 
-The initial default branch remains at `0.1.0-SNAPSHOT`. Add documentation and
+The initial default branch remains at `0.0.1-SNAPSHOT`. Add documentation and
 release-archive plugins only to the distribution module when their pipelines are
 introduced.

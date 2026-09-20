@@ -2,7 +2,7 @@
 
 DynamoDB support for Spring Data, independently maintained by Not Your Average Dev.
 
-This documentation describes the `0.1.0-SNAPSHOT` repository bootstrap. No
+This documentation describes the `0.0.1-SNAPSHOT` repository bootstrap. No
 repository APIs, mapping behavior, queries, or auto-configuration types exist yet.
 
 The project targets Java 17 and the Spring Boot 4.0.x baseline. The root parent

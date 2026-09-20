@@ -1,82 +1,84 @@
 = Spring Data DynamoDB
 :project-url: https://github.com/Not-Your-Average-Dev/spring-data-dynamodb
-:toc: macro
 
-DynamoDB support for Spring Data.
+DynamoDB support for Spring Data, with a Spring Boot starter and a core library
+for applications that do not use Spring Boot.
 
-This independent community project is at repository bootstrap stage,
-`0.1.0-SNAPSHOT`. The build and module boundaries are in place; repository APIs,
-mapping, queries, and Spring Boot auto-configuration are not implemented yet.
-No release is advertised as available on Maven Central.
+The project is in early development at `0.0.1-SNAPSHOT`. The current version
+contains the project scaffold; client auto-configuration, mapping and repository
+support are still under development. No release is available on Maven Central yet.
 
-== Requirements and build
+== Requirements
 
-Use JDK 17 or later. The Maven Wrapper downloads Maven 3.9.16 and validates its
-SHA-256 checksum; a separate Maven installation is unnecessary.
+* Java 17 or later.
+* Spring Boot 4.0.x for applications using the starter.
 
-[source,shell]
-----
-./mvnw verify
-----
+The link:pom.xml[parent POM] manages the Spring Boot and AWS SDK for Java v2
+versions. The core library does not require Spring Boot.
 
-On Windows, use `mvnw.cmd verify`. The compiler targets Java 17 even when the
-build runs on a newer JDK. Empty-JAR and no-tests messages are expected during
-bootstrap.
+== Using the library
 
-The parent imports Spring Boot `4.0.8` and AWS SDK for Java v2 `2.54.17` BOMs.
-Spring Data Commons is managed by the Boot BOM. CI verifies Java 17 with the
-default baseline and the `spring-boot.compatibility.version` from the parent POM.
-To run that compatibility check locally:
-
-[source,shell]
-----
-./mvnw -Dspring-boot.version=4.1.1 verify
-----
-
-== Planned consumer coordinates
-
-These examples describe the intended `0.1.0` release coordinates. They will become
-usable after that release is published.
-
-=== Core-only applications
-
-[source,xml]
-----
-<dependency>
-    <groupId>dev.notyouraverage</groupId>
-    <artifactId>spring-data-dynamodb</artifactId>
-    <version>0.1.0</version>
-</dependency>
-----
-
-The core library is independent of Spring Boot.
+The following coordinates are planned for the first `0.0.1` release. They are
+provided for reference and cannot be used from Maven Central until publication.
 
 === Spring Boot applications
+
+Add the starter to your application:
 
 [source,xml]
 ----
 <dependency>
     <groupId>dev.notyouraverage</groupId>
     <artifactId>spring-data-dynamodb-spring-boot-starter</artifactId>
-    <version>0.1.0</version>
+    <version>0.0.1</version>
 </dependency>
 ----
 
-The starter aggregates the Boot integration, the core Boot starter, and the AWS
-Apache HTTP client at runtime. It contains no Java classes.
+The starter includes the Spring Boot integration and the AWS SDK's Apache HTTP
+client. Configuration will use the `spring.data.dynamodb` namespace. Configuration
+examples will be documented here as the corresponding features become available.
 
-== Repository guide
+=== Applications without Spring Boot
 
-The Maven reactor has four modules: core, Spring Boot integration, dependency
-starter, and distribution. The parent manages their shared version and build.
-Documentation lives under link:src/main/antora/[src/main/antora]. Start with the
-link:src/main/antora/modules/ROOT/pages/architecture.adoc[module and namespace guide]
-and the link:src/main/antora/modules/ROOT/pages/releases.adoc[release checklist].
-The Antora site and release archive pipelines will be introduced later in the
-distribution module.
+Use the core library directly:
 
-See link:CONTRIBUTING.adoc[contributing], link:CODE_OF_CONDUCT.adoc[community conduct],
-link:SECURITY.adoc[security reporting], and link:CHANGELOG.adoc[the changelog].
+[source,xml]
+----
+<dependency>
+    <groupId>dev.notyouraverage</groupId>
+    <artifactId>spring-data-dynamodb</artifactId>
+    <version>0.0.1</version>
+</dependency>
+----
+
+The core library depends on Spring Data Commons and the AWS SDK for Java v2,
+including the DynamoDB Enhanced Client.
+
+== Building from source
+
+Clone the repository and build with the included Maven Wrapper:
+
+[source,shell]
+----
+git clone https://github.com/Not-Your-Average-Dev/spring-data-dynamodb.git
+cd spring-data-dynamodb
+./mvnw verify
+----
+
+On Windows, use `mvnw.cmd verify`. A separate Maven installation is unnecessary.
+The first build requires network access to download Maven and dependencies.
+Empty-JAR and no-tests messages are expected while the project contains only the
+scaffold.
+
+See link:CONTRIBUTING.adoc[CONTRIBUTING] for development setup, tests and pull requests.
+
+== Documentation and support
+
+* link:src/main/antora/modules/ROOT/pages/architecture.adoc[Module and package guide]
+* link:CHANGELOG.adoc[Changelog]
+* {project-url}/issues[Bug reports and feature requests]
+* link:SECURITY.adoc[Reporting a vulnerability]
+* link:CODE_OF_CONDUCT.adoc[Code of conduct]
 
 == License
 

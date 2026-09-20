@@ -1,58 +1,96 @@
 = Contributing to Spring Data DynamoDB
 
-Thank you for contributing. Read link:CODE_OF_CONDUCT.adoc[the code of conduct]
-and use the GitHub issue forms for reproducible bugs and proposed features.
-Report vulnerabilities using link:SECURITY.adoc[the security policy].
+Bug reports, documentation improvements and code contributions are welcome.
+For a new API or a substantial change, open an issue to discuss the use case and
+design before submitting a pull request. Please follow the
+link:CODE_OF_CONDUCT.adoc[code of conduct] and report vulnerabilities through the
+link:SECURITY.adoc[security policy].
 
-== Local development
+== Development setup
 
-Install a JDK at version 17 or later, clone the repository, and run:
+Install Java 17 or later, fork and clone the repository, then run:
 
 [source,shell]
 ----
 ./mvnw verify
 ----
 
-The wrapper downloads a checksum-verified Maven distribution. Network access is
-required for the first build and for dependencies that are not cached. Builds
-require Maven 3.9 or later if you choose to use a local Maven installation.
+On Windows, use `mvnw.cmd verify`. The Maven Wrapper downloads Maven and verifies
+its distribution checksum. The first build requires network access. You can also
+use a local Maven installation at version 3.9 or later.
 
-Follow `.editorconfig`. Use UTF-8, four spaces in Java and XML, and two spaces in
-YAML. Keep dependency and plugin versions in the parent POM. Child modules inherit
-the reactor version, and internal dependencies use `${project.version}`.
+The compiler targets Java 17. CI builds with Java 17 against both the baseline
+and compatibility Spring Boot versions declared in the link:pom.xml[parent POM].
+Run the compatibility build locally with:
 
-== Scope and module boundaries
+[source,shell]
+----
+./mvnw -Dspring-boot.version=4.1.1 verify
+----
 
-The bootstrap deliberately has no Java implementation. Propose API and mapping
-design in an issue before introducing broad functionality. Add focused tests
-with behavior as it is implemented; empty placeholder tests are unnecessary.
+Use the current `spring-boot.compatibility.version` from the parent POM if it
+differs from this example.
 
-Keep Spring Boot dependencies and types out of the core library. Put Boot-specific
-code in the Boot integration module. The starter is a dependency-only JAR and
-must have no Java sources. Do not shade Spring Data or AWS SDK packages.
+== Project structure
 
-Use `DynamoDB` in prose, `dynamodb` in artifact IDs, directories, and packages, and
-`DynamoDb` as a future Java symbol prefix. The base configuration namespace is
-`notyouraverage.dynamodb`.
+* `spring-data-dynamodb`: Spring Data integration independent of Spring Boot.
+* `spring-data-dynamodb-spring-boot`: Spring Boot configuration and integration.
+* `spring-data-dynamodb-spring-boot-starter`: dependency-only starter, with no Java sources.
+* `spring-data-dynamodb-distribution`: documentation and release distribution.
 
-The link:src/main/antora/modules/ROOT/pages/architecture.adoc[architecture guide]
-records package boundaries and module names. Documentation sources belong in
-`src/main/antora`; future documentation and archive plugins belong in the
-distribution module.
+Keep Boot dependencies and types in the Boot integration module. Do not shade
+Spring Data or AWS SDK packages. The
+link:src/main/antora/modules/ROOT/pages/architecture.adoc[architecture guide]
+describes the package boundaries and module names.
+
+== Code style
+
+Follow `.editorconfig`: UTF-8, four spaces for Java and XML, and two spaces for YAML.
+Keep dependency and plugin versions in the parent POM. Child modules inherit the
+project version; dependencies between modules use `${project.version}`.
+
+Use `DynamoDB` in prose, `dynamodb` in artifact IDs and packages, and `DynamoDb`
+in Java class names. Application configuration belongs under `spring.data.dynamodb`.
+Public documentation lives in `src/main/antora`.
+
+== Tests
+
+Include tests that demonstrate the behavior of your change and cover relevant
+failure cases. Keep unit tests independent of local AWS profiles, credentials and
+network access. Test Boot configuration with `ApplicationContextRunner`, including
+user-provided beans, disabled features, missing dependencies and invalid settings.
+For resources such as clients, verify who owns them and when they are closed.
+
+Integration tests should use DynamoDB Local with test-owned tables and credentials.
+They must not access real AWS accounts. Keep unit and context tests runnable with
+`./mvnw test` without a container runtime; run integration tests through Failsafe
+with `./mvnw verify`. An unavailable container runtime must produce a clear failure
+when integration tests are required.
+
+The project currently has no Java implementation or tests. As functionality is
+added, contributions must include its tests and build configuration. The coverage
+policy is at least 90% line and 85% branch coverage for each implemented core or
+Boot module, measured with JaCoCo. These checks will become active with the first
+implementation. Any exclusions need a specific justification in the pull request;
+configuration and error-handling code are part of the coverage requirement.
+
+Use assertions about results, failures and side effects to establish correctness.
+Coverage percentages help identify gaps but do not replace those assertions.
 
 == Pull requests
 
-Keep changes focused, explain the behavior and motivation, and record relevant
-validation. Run `./mvnw verify` and the Boot compatibility build described in the
-README. Update documentation and `CHANGELOG.adoc` when behavior changes.
+* Keep the change focused and describe the problem it solves.
+* Add or update tests and user-facing documentation where behavior changes.
+* Add a changelog entry for changes that affect users or contributors.
+* Run the baseline and compatibility builds before requesting review.
+* Include the commands and results in the pull request description.
 
-Do not commit credentials, local Maven settings, signing keys, deployment tokens,
-or build output. Contributions are made under the project's Apache 2.0 license.
+Do not commit credentials, local Maven settings, signing keys, deployment tokens
+or build output. Contributions are licensed under the project's Apache License 2.0.
 
-== Dependency maintenance
+== Dependency updates
 
-Dependabot opens weekly Maven and GitHub Actions pull requests. The Boot BOM
-stays on the lowest supported minor line; baseline minor upgrades require an
-intentional compatibility decision. Review and update
-`spring-boot.compatibility.version` in the parent POM as newer supported Boot
-minor releases become available. CI reads that property directly.
+Dependabot opens weekly Maven and GitHub Actions pull requests. Keep the baseline
+Boot BOM on the lowest supported minor line. Changes to that baseline require a
+compatibility review. Update `spring-boot.compatibility.version` in the parent POM
+when adding a supported Boot minor; CI reads this property directly.

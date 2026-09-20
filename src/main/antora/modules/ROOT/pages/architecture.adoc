@@ -1,7 +1,7 @@
 = Modules and namespaces
 
 All modules inherit `dev.notyouraverage:spring-data-dynamodb-parent` and use the
-same reactor version, initially `0.1.0-SNAPSHOT`.
+same reactor version, initially `0.0.1-SNAPSHOT`.
 
 [cols="2,1,3",options="header"]
 |===
@@ -44,7 +44,7 @@ Boot packages belong only in the Boot integration module. `.gitkeep` files
 preserve empty directories and are excluded from JAR contents. No classes or
 `module-info.java` are introduced during bootstrap.
 
-The base configuration namespace is `notyouraverage.dynamodb`. The Boot module
+The base configuration namespace is `spring.data.dynamodb`. The Boot module
 reserves `src/main/resources/META-INF/spring/`; add
 `org.springframework.boot.autoconfigure.AutoConfiguration.imports` only when real
 auto-configuration classes exist.

@@ -2,7 +2,7 @@
 
 == Supported versions
 
-The project is in bootstrap development at `0.1.0-SNAPSHOT`. No stable version is
+The project is in bootstrap development at `0.0.1-SNAPSHOT`. No stable version is
 currently released or supported for production use. A supported-version policy
 will be published with the first stable release.
 
