@@ -53,7 +53,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.outputTimestamp>2026-09-19T00:00:00Z</project.build.outputTimestamp>
 
-        <spring-boot.version>4.0.8</spring-boot.version>
+        <spring-boot.version>4.0.9</spring-boot.version>
         <!-- Used only by the CI compatibility build; published defaults stay on 4.0.x. -->
         <spring-boot.compatibility.version>4.1.1</spring-boot.compatibility.version>
         <aws-sdk.version>2.54.19</aws-sdk.version>
